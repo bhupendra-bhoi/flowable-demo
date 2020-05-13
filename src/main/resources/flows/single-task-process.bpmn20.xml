@@ -10,20 +10,12 @@
   
     <startEvent id="start" flowable:initiator="initiator"/>
     
-    <sequenceFlow sourceRef="start" targetRef="start-http-test"/>
-    	
-    <serviceTask id="start-http-test" name="start-http-test" flowable:type="http">
-      <extensionElements>
-        <flowable:field name="requestMethod">
-          <flowable:string><![CDATA[GET]]></flowable:string>
-        </flowable:field>
-        <flowable:field name="requestUrl">
-          <flowable:string><![CDATA[https://gorest.co.in/public-api/users?access-token=olSc6aK-7ITivMCTxs6q3can57XhyT-agwpD]]></flowable:string>
-        </flowable:field>
-      </extensionElements>
-    </serviceTask>
+    <sequenceFlow sourceRef="start" targetRef="confirm-email-task"/>
     
-    <sequenceFlow sourceRef="start-http-test" targetRef="send-welcome-email-task"/>
+    <userTask id="confirm-email-task" name="confirm-email-task"
+    	flowable:assignee="${initiator}"/>
+    
+    <sequenceFlow sourceRef="confirm-email-task" targetRef="send-welcome-email-task"/>
     
     <serviceTask id="send-welcome-email-task"
     	flowable:expression="#{emailService.sendWelcomeEmail(customerId, email)}"/>
